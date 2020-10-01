@@ -30,6 +30,10 @@ export default {
       type: Boolean,
       default: false
     },
+    fallbackErrorProps: {
+      type: Boolean,
+      default: false
+    },
     tag: {
       type: String,
       default: 'span'
@@ -64,11 +68,14 @@ export default {
         info: this.info
       })
     }
-
+    const fallbackProps = { ...this.params };
+    if (this.fallbackErrorProps) {
+      Object.assign(fallbackProps, { err: this.err, info: this.info });
+    }
     const fallbackOrScoped = isScoped
       ? scopedSlot
       : h(this.fallBack, {
-        props: {...this.params}
+        props: fallbackProps
       })
     
     if (this.hasError) {
